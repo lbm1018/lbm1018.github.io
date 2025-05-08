@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>세트 제작 최적 계산기</title>
+  <link rel="icon" href="abydos.png" type="image/png">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 5px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 15px; font-size: 16px; }
+    .result { margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+    .text-outline {
+      text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+      font-weight: bold;
+    }
+    .abydos { color: #FF9800; } /* 파란색 */
+    .premium { color: #4CAF50; } /* 초록색 */
+    .normal { color: #FFFFFF; } /* 검정색 */
+    .lore { color: #D3D3D3; } /* 검정색 */
+  </style>
+</head>
+<body>
+  <h1>세트 제작 최적 계산기</h1>
+
+  <label>A (<span class="text-outline abydos">아비도스</span>) 개수<input type="number" id="a" value="164"></label>
+  <label>B (<span class="text-outline premium">고급</span>) 개수<input type="number" id="b" value="2270"></label>
+  <label>C (<span class="text-outline normal">일반</span>) 개수<input type="number" id="c" value="11410"></label>
+  <label><span class="text-outline lore">A필요량</span><input type="number" id="a_req" value="33"></label>
+  <label><span class="text-outline lore">B필요량</span><input type="number" id="b_req" value="45"></label>
+  <label><span class="text-outline lore">C필요량</span><input type="number" id="c_req" value="86"></label>
+
+  <button onclick="calculate()">계산하기</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      let a = parseInt(document.getElementById('a').value);
+      let b = parseInt(document.getElementById('b').value);
+      let c = parseInt(document.getElementById('c').value);
+      const A_REQ = parseInt(document.getElementById('a_req').value);
+      const B_REQ = parseInt(document.getElementById('b_req').value);
+      const C_REQ = parseInt(document.getElementById('c_req').value);
+      let powder = 0;
+
+      let b_to_powder = 0;
+      let c_to_powder = 0;
+
+      const getSetCounts = () => [
+        Math.floor(a / A_REQ),
+        Math.floor(b / B_REQ),
+        Math.floor(c / C_REQ)
+      ];
+
+      const maxDiff = (sets) => Math.max(...sets) - Math.min(...sets);
+
+      while (true) {
+        const sets = getSetCounts();
+        if (maxDiff(sets) <= 1) break;
+
+        if (sets[1] >= sets[2] && b >= 50) {
+          b -= 50;
+          powder += 80;
+          b_to_powder++;
+        } else if (c >= 100) {
+          c -= 100;
+          powder += 80;
+          c_to_powder++;
+        } else {
+          break;
+        }
+
+        if (powder >= 100) {
+          const exchange = Math.floor(powder / 100);
+          a += exchange * 10;
+          powder -= exchange * 100;
+        }
+      }
+
+      const [a_set, b_set, c_set] = getSetCounts();
+      const final_sets = Math.min(a_set, b_set, c_set);
+
+      document.getElementById("result").innerHTML = `
+        <strong>✅ 최대 세트 수:</strong> ${final_sets}<br>
+        <strong>📦 자원:</strong><br>
+        - <span class="text-outline abydos">아비도스</span> (A): ${a} (세트 ${a_set})<br>
+        - <span class="text-outline premium">고급</span> (B): ${b} (세트 ${b_set})<br>
+        - <span class="text-outline normal">일반</span> (C): ${c} (세트 ${c_set})<br>
+        - 가루: ${powder}<br><br>
+        <strong>🔁 가루 교환 횟수:</strong><br>
+        - B → 가루: ${b_to_powder}회<br>
+        - C → 가루: ${c_to_powder}회
+      `;
+    }
+  </script>
+</body>
+</html>
