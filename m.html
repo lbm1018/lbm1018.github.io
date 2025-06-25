@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>아이템 제작기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+
+    .item-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .result {
+      flex: 1;
+      text-align: center;
+    }
+
+    .result img {
+      max-width: 100px;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .after-fee {
+      font-size: 14px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .materials {
+      flex: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding-left: 20px;
+    }
+
+    .material {
+      text-align: center;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .material img {
+      max-width: 60px;
+      margin-bottom: 5px;
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 5px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    hr {
+      margin: 30px 0;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 완성템 A -->
+  <div class="item-container">
+    <div class="result">
+      <img src="mImage/보킬.png" alt="보스 킬러의 비약">
+      <div class="price" id="price-A">0 원</div>
+      <div class="after-fee" id="after-fee-A">0 원 (수수료 제외)</div>
+    </div>
+    <div class="materials">
+      <div class="material">
+        <img src="mImage/히솝꽃오일.png" alt="히솝 꽃 오일">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('A')">
+      </div>
+      <div class="material">
+        <img src="mImage/황정.png" alt="황혼의 정수">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('A')">
+      </div>
+      <div class="material">
+        <img src="mImage/뒤시정.png" alt="뒤틀린 시간의 정수">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('A')">
+      </div>
+      <div class="material">
+        <img src="mImage/마결.png" alt="마력 결정">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('A')">
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 완성템 B -->
+  <div class="item-container">
+    <div class="result">
+      <img src="mImage/고보킬.png" alt="고급 보스 킬러의 비약">
+      <div class="price" id="price-B">0 원</div>
+      <div class="after-fee" id="after-fee-B">0 원 (수수료 제외)</div>
+    </div>
+    <div class="materials">
+      <div class="material">
+        <img src="mImage/보킬.png" alt="보스 킬러의 비약">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('B')">
+      </div>
+      <div class="material">
+        <img src="mImage/히솝꽃오일.png" alt="히솝 꽃 오일">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('B')">
+      </div>
+      <div class="material">
+        <img src="mImage/상주정.png" alt="상급 주문의 정수">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('B')">
+      </div>
+      <div class="material">
+        <img src="mImage/영황정.png" alt="영롱한 황혼의 정수">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('B')">
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 완성템 C -->
+  <div class="item-container">
+    <div class="result">
+      <img src="mImage/숫돌.png" alt="숫돌">
+      <div class="price" id="price-C">0 원</div>
+      <div class="after-fee" id="after-fee-C">0 원 (수수료 제외)</div>
+    </div>
+    <div class="materials">
+      <div class="material">
+        <img src="mImage/최상결.png" alt="최상급 아이템 결정">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('C')">
+      </div>
+      <div class="material">
+        <img src="mImage/뒤시정.png" alt="뒤틀린 시간의 정수">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('C')">
+      </div>
+      <div class="material">
+        <img src="mImage/상주정.png" alt="상급 주문의 정수">
+        <input type="number" placeholder="가격 입력" oninput="updatePrice('C')">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updatePrice(itemId) {
+      const container = document.querySelector(`#price-${itemId}`).closest('.item-container');
+      const inputs = container.querySelectorAll('input[type="number"]');
+      let total = 0;
+
+      inputs.forEach(input => {
+        const val = parseFloat(input.value);
+        if (!isNaN(val)) total += val;
+      });
+
+      const afterFee = Math.floor(total * 0.95);
+      document.getElementById(`price-${itemId}`).textContent = `${total.toLocaleString()} 원`;
+      document.getElementById(`after-fee-${itemId}`).textContent = `${afterFee.toLocaleString()} 원 (수수료 제외)`;
+    }
+  </script>
+
+</body>
+</html>
